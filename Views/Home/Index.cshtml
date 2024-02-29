@@ -1,4 +1,4 @@
-﻿@model CountryViewModel
+﻿@model CountryListViewModel
 @{
     ViewData["Title"] = "Olympic Games";
 }
@@ -35,8 +35,16 @@
                 @foreach (Country country in @Model.Country)
                 {
                     <li class="list-inline-item">
-                    <img src="~/images/@country.CountryFlag" alt="@country.Name" title="@country.Name | @country.Game.Name @country.Sport.Name"/>
+                        <form asp-action="Details" method="Post">
+                            <button class="bg-white border=0" type="submit">
+                                <img src="~/images/@country.CountryFlag" alt="@country.Name" title="@country.Name | @country.Game.Name @country.Sport.Name" />
+                            </button>
+                            <input type="hidden" asp-for="@country.CountryId" />
+                            <input type="hidden" asp-for="activeGame" />
+                            <input type="hidden" asp-for="activeSport" />
+                        </form>                      
                     </li>
+                    
                 }
             </ul>
 

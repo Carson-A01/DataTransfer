@@ -5,6 +5,8 @@
         public List<Country> Country { get; set; }
         public string activeGame { get; set; } = "all";
         public string activeSport { get; set; } = "all";
+    }
+    public class CountryListViewModel : CountryViewModel {
         private List<Game> games;
         public List<Game> Games { get => games; set { games = value; games.Insert(0, new Game { GameId = "all", Name = "All" }); } }
         private List<Sport> sports;

@@ -1,6 +1,7 @@
 ﻿using DataTransfer.Models;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 using System.Diagnostics;
 
@@ -23,7 +24,7 @@ namespace DataTransfer.Controllers
             ViewBag.Game = games;
             ViewBag.Sports = sports;
            */
-            var model = new CountryViewModel
+            var model = new CountryListViewModel
             {
                 activeGame = activeGame,
                 activeSport = activeSport,
@@ -46,5 +47,27 @@ namespace DataTransfer.Controllers
             
             return View(model);
         }
+
+        [HttpPost]
+        public RedirectToActionResult Details(CountryViewModel country)
+        {
+           
+            TempData["activeGame"] = country.activeGame;
+            TempData["activeSport"] = country.activeSport;
+            return RedirectToAction("Details", new { Id = country.Country.CountryId });
+        }
+
+        [HttpGet]
+        public ViewResult Details(string id)
+        {
+            var model = new CountryViewModel
+            {
+                Country = context.countries.Include(c => c.Game).Include(c => c.Sport).FirstOrDefault(c => c.CountryId == id),
+                activeGame = TempData?.Peek("activeGame")?.ToString() ?? "all",
+                activeSport = TempData?.Peek("activeSport")?.ToString() ?? "all"
+            };
+            return View(model);
+        }
+
     }
 }
